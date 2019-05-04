@@ -65,17 +65,32 @@ int main()
 	if (!loadImage("../img/face.jpg", img) || !loadImage("../img/wall.jpg", img2))
 		return -1;
 	unsigned int texture1,texture2;
-	glGenTextures(1, &texture1);
+	glGenTextures(1, &texture1);				
 	glBindTexture(GL_TEXTURE_2D, texture1);
+	/**
+		glTexParameteri
+		功能：设置纹理环绕方式
+		GL_TEXTURE_2D：2d图像
+		GL_TEXTURE_WRAP_S：s坐标
+		GL_REPEAT：纹理默认行为：重复纹理图像
+		GL_MIRRORED_REPEAT，重复纹理但镜像放置
+		GL_CLAMP_TO_BORDER：超出部分使用边缘颜色填充（需要指定边缘颜色）
+		---------------------------------------------------------------
+		纹理过滤：
+		GL_LINEAR：线性过滤，基于纹理坐标附近像素计算插值，近似表示
+		GL_TEXTURE_MIN_FILTER：进行缩小时
+		GL_TEXTURE_MAG_FILTER：进行放大时
+	*/
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	//生成纹理
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.width, img.height, 0, GL_RGB, GL_UNSIGNED_BYTE, img.datas);
+	//自动生成多级渐远纹理
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(img.datas);
-
 
 	glGenTextures(1, &texture2);
 	glBindTexture(GL_TEXTURE_2D, texture2);
@@ -90,8 +105,8 @@ int main()
 	//disableVertexObj();
 	cout << "max vertex:" << getMaxVertexAttribute() << endl;;
 	ourshader.use();
-	glUniform1i(glGetUniformLocation(ourshader.ID, "texture1"), 0);
-	glUniform1i(glGetUniformLocation(ourshader.ID, "texture2"), 1);
+	ourshader.setUniformInt("texture1", 0);
+	ourshader.setUniformInt("texture2", 1);
 	while (!glfwWindowShouldClose(window))
 	{
 
