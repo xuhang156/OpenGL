@@ -24,10 +24,10 @@
     <ClCompile Include="..\stb_image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\test_Main.cpp">
+    <ClCompile Include="..\Shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\Shader.cpp">
+    <ClCompile Include="..\test_Main1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

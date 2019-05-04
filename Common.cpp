@@ -179,6 +179,7 @@ void processInput(GLFWwindow* window)
 
 bool loadImage(std::string imgpath,imgData& img)
 {
+	stbi_set_flip_vertically_on_load(true);	//加载图像之前反转y轴，opengl要求y轴0，0位于图像的底部，但是使用库读取的时候0，0是图像的顶部，会造成图像反转的情况
 	img.datas = stbi_load(imgpath.c_str(), &img.width, &img.height, &img.nrChannels, 0);
 	if (img.datas == NULL)
 		return false;

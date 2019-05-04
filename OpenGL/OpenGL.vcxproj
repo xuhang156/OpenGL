@@ -129,7 +129,7 @@
     <ClCompile Include="..\Common.cpp" />
     <ClCompile Include="..\Shader.cpp" />
     <ClCompile Include="..\stb_image.cpp" />
-    <ClCompile Include="..\test_Main.cpp" />
+    <ClCompile Include="..\test_Main1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common.h" />
