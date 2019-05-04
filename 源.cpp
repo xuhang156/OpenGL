@@ -1,38 +1,43 @@
 
+#ifndef HELLO
+
 #include "Common.h"
 #include <iostream>
 using namespace std;
 const int WIDTH = 800;
 const int HEIGHT = 600;
+float textCoords[] = {
+	0.0f,0.0f,
+	1.0f,0.0f,
+	0.5f,1.0f
+};
 
 int main()
 {
-	
-	initGlVersion();
 	windowConfig config{ WIDTH, HEIGHT, "LenrnOpenGL" };
 	GLFWwindow* window = initGLFWWindow(config);
 	if (window == NULL)
 		return -1;
-
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		return -1;
 	}
 
+	initGlVersion();
 	vector<int>sharder;
 	char* p = GetVertexShaderGLSL();
-	if (!createSharder(GL_VERTEX_SHADER,p,sharder))
+	if (!createSharder(GL_VERTEX_SHADER, p, sharder))
 		return -1;
 	p = GetFragmentShaderGLSL(2);
 	if (!createSharder(GL_FRAGMENT_SHADER, p, sharder))
 		return -1;
-	
+
 	//着色器程序对象是多个着色器合并后且最终链接完成的版本，需要将各个着色器链接成着色器程序对象
 	int shaderProgram;
-	if (!createAndLinkProgram(shaderProgram,sharder))
+	if (!createAndLinkProgram(shaderProgram, sharder))
 		return -1;
-	unsigned int VAO, VBO,EBO;
+	unsigned int VAO, VBO, EBO;
 	vector<Point3<float>> points;
 	Point3<float> next{ 0.5f,0.5f,0.0f };
 	Point3<float> right{ 0.5f, -0.5f, 0.0f };
@@ -47,7 +52,7 @@ int main()
 	points.push_back(right);
 	points.push_back(left);
 	points.push_back(top);
-	initVAO_ABO(points, VAO,VBO);
+	initVAO_ABO(points, VAO, VBO);
 	createEBO(indices, EBO);
 	setFilMode(GL_FILL);			//设置渲染模式
 	disableVertexObj();
@@ -70,3 +75,7 @@ int main()
 	glDeleteBuffers(1, &EBO);
 	return 0;
 }
+
+
+#endif // !1
+
