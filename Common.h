@@ -14,6 +14,13 @@ using namespace std;
 #pragma comment(lib, "E:/workspace/lib/GLFW/lib/Debug64_2019/glfw3dll.lib")				//¼ÓÔØ¿âÂ·¾¶
 #endif 
 #endif 
+struct imgData
+{
+	int width;
+	int height;
+	int nrChannels;
+	unsigned char* datas = NULL;
+};
 struct windowConfig
 {
 	int width;
@@ -100,3 +107,4 @@ void controlUniformGlobal(int);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
+bool loadImage(std::string imgpath, imgData& img);

@@ -127,10 +127,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\glad\src\glad.c" />
     <ClCompile Include="..\Common.cpp" />
-    <ClCompile Include="..\源.cpp" />
+    <ClCompile Include="..\Shader.cpp" />
+    <ClCompile Include="..\stb_image.cpp" />
+    <ClCompile Include="..\test_Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common.h" />
+    <ClInclude Include="..\Shader.h" />
+    <ClInclude Include="..\stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

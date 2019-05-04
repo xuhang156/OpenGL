@@ -1,3 +1,4 @@
+#include "stb_image.h"
 #include "Common.h"
 
 void initGlVersion(int mainVersion , int minorVersion )
@@ -33,6 +34,16 @@ char* GetVertexShaderGLSL(int inde)
 				 "      veccolor = vec4(0.5,0.0,0.0,1.0);			\n"
 				 " }";
 	members[index++] = str;
+	str = "#version 330 core		\n"
+		"layout (location = 0) in vec3 aPos;		\n"
+		"layout (location = 1) in vec3 aColor;		\n"
+		"out vec3 outColor;							\n"
+		"void main()								\n"
+		"{											\n"
+		"	gl_Position = vec4(aPos,1.0);			\n"
+		"	outColor = aColor;						\n"
+		"}";
+	members[index++] = str;
 	auto iter = members.find(inde);
 	if (iter == members.end())
 		return NULL;
@@ -54,7 +65,6 @@ char* GetFragmentShaderGLSL(int inde)
 			"FragColor = veccolor;						\n"				//如果不指定颜色则会输出黑色
 			"} ";
 	members[index++] = str;
-
 	str = "#version 330 core						\n	"
 		"in vec4  veccolor;							\n"				//捕获上一个着色器返回的变量
 		"uniform vec4 globalColor;					\n"				//定义一个全局的变量，可在c++程序中赋值等操作					
@@ -62,9 +72,16 @@ char* GetFragmentShaderGLSL(int inde)
 		"void main()								\n"
 		"{											\n"
 		"FragColor = globalColor;					\n"				//如果不指定颜色则会输出黑色
-		"} ";
+		"}\0";
 	members[index++] = str;
-
+	str = "#version 330 core						\n"
+		"out vec4 FragColor;						\n"
+		"in vec3 outColor;							\n"
+		"void main()								\n"
+		"{											\n"
+		"	FragColor = vec4(outColor,1.0);         \n"
+		"}\0";
+	members[index++] = str;
 	auto iter = members.find(inde);
 	if (iter == members.end())
 		return NULL;
@@ -144,6 +161,7 @@ void controlUniformGlobal(int shaderProgram)
 	glUseProgram(shaderProgram);
 	glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 }
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	if (height == 0)  									// Prevent A Divide By Zero By
@@ -159,3 +177,10 @@ void processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true);
 }
 
+bool loadImage(std::string imgpath,imgData& img)
+{
+	img.datas = stbi_load(imgpath.c_str(), &img.width, &img.height, &img.nrChannels, 0);
+	if (img.datas == NULL)
+		return false;
+	return true;
+}
