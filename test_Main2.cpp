@@ -1,4 +1,5 @@
-#if 0
+#if 1
+//透视方法
 #include "Common.h"
 #include "stb_image.h"
 #include "Shader.h"
@@ -17,16 +18,16 @@ int main()
 	{
 		return -1;
 	}
-	Shader ourshader("../ShaderFiles/shader_img.vs", "../ShaderFiles/shader_img.fs");
+	Shader ourshader("../ShaderFiles/shader_perspective.vs", "../ShaderFiles/shader_perspective.fs");
 	if (!ourshader.isSuccess())
 		return -1;
 	unsigned int VAO, VBO, EBO;
 	float vertices[] = {
-		// positions          // colors           // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+		// positions        // texture coords
+		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, // top right
+		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
+		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f  // top left 
 	};
 	unsigned int indices[] = {
 	  0, 1, 3, // first triangle
@@ -52,14 +53,11 @@ int main()
 		8 * sizeof(float)：步长，下一个点索引的位置
 		(void*)0：起始位置，起始偏移量
 	*/
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);	//启用顶点属性
-	//颜色
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
-	glEnableVertexAttribArray(1);
 	//纹理
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(float)));
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	imgData img, img2;
 	if (!loadImage("../img/face.jpg", img) || !loadImage("../img/wall.jpg", img2))
@@ -117,6 +115,20 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, texture2);	//绑定到第一个纹理上
 
 		ourshader.use();
+
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+		
+		unsigned int modelLoc = glGetUniformLocation(ourshader.ID, "model");
+		unsigned int viewLoc = glGetUniformLocation(ourshader.ID, "view");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(ourshader.ID,"projection"), 1,GL_FALSE,glm::value_ptr(projection));
+
 		glBindVertexArray(VAO);					//根据表示符绑定相应的顶点数组对象
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

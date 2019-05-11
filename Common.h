@@ -4,6 +4,9 @@
 #include<iostream>
 #include<vector>
 #include "glad/glad.h"		//注意头文件包含的顺序啊，这块容易报错
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "glfw3.h"
 using namespace std;
 //预编译编译器版本

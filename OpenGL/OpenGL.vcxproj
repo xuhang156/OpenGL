@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>E:\workspace\lib\GLFW\include\GLFW;E:\workspace\lib\glad\include;$(IncludePath)</IncludePath>
+    <IncludePath>E:\workspace\lib\GLFW\include\GLFW;E:\workspace\lib;E:\workspace\lib\glad\include;E:\workspace\lib\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -130,6 +130,7 @@
     <ClCompile Include="..\Shader.cpp" />
     <ClCompile Include="..\stb_image.cpp" />
     <ClCompile Include="..\test_Main1.cpp" />
+    <ClCompile Include="..\test_Main2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common.h" />
